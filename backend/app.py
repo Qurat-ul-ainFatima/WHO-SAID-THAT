@@ -28,7 +28,7 @@ import numpy as np
 
 # 1. Load the trained pipeline (.pkl)
 
-MODEL_PATH = Path("covid_fake_news_nb.pkl")
+MODEL_PATH = Path("covid_fake_news_nb_with_validation.pkl")
 pipe = joblib.load(MODEL_PATH) 
 
 # 2. Spin up the Flask app and enable CORS so the Next.js front‑end running
