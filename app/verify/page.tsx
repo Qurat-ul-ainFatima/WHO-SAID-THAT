@@ -18,7 +18,6 @@ export default function VerifyPage() {
     setText(value)
     setCharCount(value.length)
   }
-
 const handleVerify = async () => {
   if (!text.trim()) return
   setLoading(true)
@@ -32,13 +31,14 @@ const handleVerify = async () => {
 
     if (!res.ok) throw new Error("Failed to verify")
 
-    const { label, confidence } = await res.json()
+    const { label, confidence, keywords } = await res.json()
     const pct = (Number(confidence) * 100).toFixed(1)
 
-    // ✅ Only delay the navigation
-    setTimeout(() => {
-      router.push(`/result/${label.toLowerCase()}?p=${pct}`)
-    }, 2000)
+setTimeout(() => {
+  const encoded = encodeURIComponent(JSON.stringify(keywords))
+  router.push(`/result/${label.toLowerCase()}?p=${pct}&k=${encoded}`)
+}, 2000)
+
 
   } catch (err) {
     console.error("Verification failed:", err)
@@ -46,6 +46,7 @@ const handleVerify = async () => {
     setLoading(false)
   }
 }
+
 
   return (
     <div className="max-w-2xl mx-auto text-center">

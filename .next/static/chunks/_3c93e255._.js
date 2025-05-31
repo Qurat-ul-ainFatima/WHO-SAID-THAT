@@ -228,11 +228,11 @@ function VerifyPage() {
                 })
             });
             if (!res.ok) throw new Error("Failed to verify");
-            const { label, confidence } = await res.json();
+            const { label, confidence, keywords } = await res.json();
             const pct = (Number(confidence) * 100).toFixed(1);
-            // ✅ Only delay the navigation
             setTimeout(()=>{
-                router.push(`/result/${label.toLowerCase()}?p=${pct}`);
+                const encoded = encodeURIComponent(JSON.stringify(keywords));
+                router.push(`/result/${label.toLowerCase()}?p=${pct}&k=${encoded}`);
             }, 2000);
         } catch (err) {
             console.error("Verification failed:", err);
@@ -246,7 +246,7 @@ function VerifyPage() {
             className: "bg-white rounded-lg shadow-lg p-8 mt-8",
             children: loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$loading$2d$bar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/app/verify/page.tsx",
-                lineNumber: 54,
+                lineNumber: 55,
                 columnNumber: 11
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                 children: [
@@ -255,7 +255,7 @@ function VerifyPage() {
                         children: "Enter your text here to verify…"
                     }, void 0, false, {
                         fileName: "[project]/app/verify/page.tsx",
-                        lineNumber: 57,
+                        lineNumber: 58,
                         columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -266,7 +266,7 @@ function VerifyPage() {
                         placeholder: "Enter your text here to verify..."
                     }, void 0, false, {
                         fileName: "[project]/app/verify/page.tsx",
-                        lineNumber: 61,
+                        lineNumber: 62,
                         columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -279,12 +279,12 @@ function VerifyPage() {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/verify/page.tsx",
-                            lineNumber: 70,
+                            lineNumber: 71,
                             columnNumber: 15
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/verify/page.tsx",
-                        lineNumber: 69,
+                        lineNumber: 70,
                         columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -294,19 +294,19 @@ function VerifyPage() {
                         children: "Verify"
                     }, void 0, false, {
                         fileName: "[project]/app/verify/page.tsx",
-                        lineNumber: 75,
+                        lineNumber: 76,
                         columnNumber: 13
                     }, this)
                 ]
             }, void 0, true)
         }, void 0, false, {
             fileName: "[project]/app/verify/page.tsx",
-            lineNumber: 52,
+            lineNumber: 53,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/verify/page.tsx",
-        lineNumber: 51,
+        lineNumber: 52,
         columnNumber: 5
     }, this);
 }

@@ -40,31 +40,27 @@ CORS(app)
 # 3. Helper – pull out the 4 most influential tokens so users get a clue
 #    *why* the model said "fake" / "real".
 
-def layman_reason(text: str, top_k: int = 4) -> str:
-    """Return a comma separated string with the `top_k` tokens that had
-    the biggest absolute impact on this particular prediction."""
-
+def layman_reason_with_scores(text: str, top_k: int = 4) -> dict:
+    """Return a dict of top_k tokens and their contribution scores."""
     tfidf = pipe.named_steps["tfidf"]
     clf = pipe.named_steps["clf"]
 
-    # Weight vector depends on model family
-    if hasattr(clf, "coef_"):  # linear SVM / Logistic Regression
+    if hasattr(clf, "coef_"):  # linear models
         coef = clf.coef_.ravel()
-    elif hasattr(clf, "feature_log_prob_"):  # MultinomialNB, BernoulliNB …
+    elif hasattr(clf, "feature_log_prob_"):  # Naive Bayes
         coef = clf.feature_log_prob_[1] - clf.feature_log_prob_[0]
     else:
-        return "N/A"  # something exotic we didn't account for
+        return {}
 
     row = tfidf.transform([text])
     idxs = row.nonzero()[1]
-    pairs = [(
-        tfidf.get_feature_names_out()[j],
-        row[0, j] * coef[j]
-    ) for j in idxs]
+    pairs = [
+        (tfidf.get_feature_names_out()[j], float(row[0, j] * coef[j]))
+        for j in idxs
+    ]
     pairs.sort(key=lambda x: abs(x[1]), reverse=True)
+    return dict(pairs[:top_k])
 
-    words = [token for token, _ in pairs[:top_k]]
-    return ", ".join(words) if words else "N/A"
 
 # 4. Main prediction endpoint
 
@@ -93,8 +89,9 @@ def verify():
     return jsonify(
         label=label,
         confidence=prob,
-        why=f"Key words: {layman_reason(text)}"
+        keywords=layman_reason_with_scores(text)  # 👈 New field
     )
+
 
 # 5. Tiny health‑check so you can open http://127.0.0.1:5000 in the browser
 
